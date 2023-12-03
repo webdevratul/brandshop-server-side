@@ -25,6 +25,21 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
 
+
+        const brandCollection = client.db("ElectraPulse").collection("brand");
+        const productDataCollection = client.db("ElectraPulse").collection("product");
+
+        app.get("/brands", async (req, res) => {
+            const result = await brandCollection.find().toArray();
+            res.send(result);
+        });
+
+        app.post("/productData", async (req, res) => {
+            const product = req.body;
+            const result = await productDataCollection.insertOne(product);
+            res.send(result);
+        });
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Connected to MongoDB!");
